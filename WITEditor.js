@@ -1,6 +1,24 @@
+/*
+This file is part of Work in Texas (WIT) Search Helper.
 
+    WIT Search Helper is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-function testMe() {
+    WIT Search Helper is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with WIT Search Helper.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+function FilterLocations() {
+	//test variable for time
+	// myT = [1,Date()]; //first is event number for tracking, second is last call of Date()
+	
 	var table = document.getElementById('id_search_results');
 	if(table == 'undefined' || table == null) {
 		window.console.log('No table found');
@@ -68,9 +86,15 @@ function deleteRow(btn) {
   row.parentNode.removeChild(row);
 }
 
-//for testing purposes
+//START - for testing purposes
 function lOut(str) {
 	window.console.log(str);
 }
+function myTime(a) {
+	lOut(a[0] + ". " + Date()-a[1]);
+	a[0]++;
+	a[1] = Date();
+}
+//END - for testing purposes
 
-window.addEventListener('load',testMe);
+window.addEventListener('load',FilterLocations);
