@@ -40,81 +40,87 @@ function FilterLocations() {
 	}
 	//***************************************
 	//TIMING FUNCTION - REMOVE WHEN NOT IN USE
-	myT = myTime(myT);
+	// myT = myTime(myT);
 	
 	//for fixing styling
 	oddRow = true; 
-	chrome.runtime.sendMessage({method: "getLocalStorage", key: "myDistances"}, function(response) {
-		//window.console.log(response.data);
-		var myDist = JSON.parse(response.data);
+	
+	//get all of localStorage
+	chrome.runtime.sendMessage({method: "getLocalStorage", key: "WITStorage"}, function(response) {
 		//***************************************
 		//TIMING FUNCTION - REMOVE WHEN NOT IN USE
 		myT = myTime(myT);
-		//window.console.log('Distances retrieved, total: ' + myDist.length);
-		chrome.runtime.sendMessage({method: "getLocalStorage", key: "maxDist"}, function(response) {
-			var myMax = response.data;
-			//***************************************
-			//TIMING FUNCTION - REMOVE WHEN NOT IN USE
-			myT = myTime(myT);
-			
-			//find column of Location
-			//Column count differs between logged in and out
-			for (var i = 0, tHead = table.rows[0].childNodes; i < 6; i++) {			
-				if (tHead[i*2+1].innerHTML.indexOf('Location') > -1) {
-					var cLoc = i;
-					break;
-				}
+		//test for bad data
+		if(response.data == 'undefined' || response.data == null) {
+			//local storage is empty, notify and exit
+			window.console.log('There was an error with the local storage variable.');
+			return;
+		}
+		//assign variables from global localStorage
+		var locStorage = JSON.parse(response.data);
+		var myDist = locStorage[0].myDistances;
+		var myMax = locStorage[0].maxDist;
+		//***************************************
+		//TIMING FUNCTION - REMOVE WHEN NOT IN USE
+		// myT = myTime(myT);
+		
+		//find column of Location
+		//Column count differs between logged in and out
+		for (var i = 0, tHead = table.rows[0].childNodes; i < 6; i++) {			
+			if (tHead[i*2+1].innerHTML.indexOf('Location') > -1) {
+				var cLoc = i;
+				break;
 			}
+		}
 
-			//***************************************
-			//TIMING FUNCTION - REMOVE WHEN NOT IN USE
-			myT = myTime(myT);
-			//var table = document.getElementById('id_search_results');
-			for (var i = 1, row; row = table.rows[i]; i++) {
-				//iterate through rows and verify their distance is below Max
-				var rCity = row.cells[cLoc].innerText;
-				//find citys precalculated distance
-				var j = myDist.map(function(e) { return e.city; }).indexOf(rCity);
-				var rowDist = "NF"; //placeholder for if a city is not found
-				if(Array.isArray(j)){
-					//multiple cities returned, find smallest distance
-					var jSmall = 1000000;
-					for (var k = 0; k < j.length; k++) {
-						if(j[k].dist < jSmall)
-							jSmall = j[k].dist;
-					}
-					var rowDist = Number(jSmall);
-				} else if(j != -1) {
-					//one city location returned
-					var rowDist = Number(myDist[j].dist);
+		//***************************************
+		//TIMING FUNCTION - REMOVE WHEN NOT IN USE
+		// myT = myTime(myT);
+		//var table = document.getElementById('id_search_results');
+		for (var i = 1, row; row = table.rows[i]; i++) {
+			//iterate through rows and verify their distance is below Max
+			var rCity = row.cells[cLoc].innerText;
+			//find citys precalculated distance
+			var j = myDist.map(function(e) { return e.city; }).indexOf(rCity);
+			var rowDist = "NF"; //placeholder for if a city is not found
+			if(Array.isArray(j)){
+				//multiple cities returned, find smallest distance
+				var jSmall = 1000000;
+				for (var k = 0; k < j.length; k++) {
+					if(j[k].dist < jSmall)
+						jSmall = j[k].dist;
 				}
-				if(rowDist == "NF") {
-					//city not found
-					//COMMENTED OUT FOR SCRIPT RUNTIME IMPROVEMENT
-					// window.console.log(rCity + ' was not found.');
-					// row.cells[cLoc].innerHTML = row.cells[cLoc].innerHTML + '<br/>CITY NOT FOUND';
+				var rowDist = Number(jSmall);
+			} else if(j != -1) {
+				//one city location returned
+				var rowDist = Number(myDist[j].dist);
+			}
+			if(rowDist == "NF") {
+				//city not found
+				//COMMENTED OUT FOR SCRIPT RUNTIME IMPROVEMENT
+				// window.console.log(rCity + ' was not found.');
+				// row.cells[cLoc].innerHTML = row.cells[cLoc].innerHTML + '<br/>CITY NOT FOUND';
+			} else {
+				//city found, compare and handle appropriately
+				if(rowDist > myMax){ ////////////////////ADD DIFFERENT SETTING FROM OPTIONS
+					//distance to city exceeds my Max, remove row
+					//window.console.log(rCity + ' removed, dist was ' + rowDist + ', max is ' + myMax);
+					deleteRow(table.rows[i]);
+					i--; 
+					// oddRow ^= true; //since row deleted, no change necessary, will flip on next iteration
 				} else {
-					//city found, compare and handle appropriately
-					if(rowDist > myMax){ ////////////////////ADD DIFFERENT SETTING FROM OPTIONS
-						//distance to city exceeds my Max, remove row
-						//window.console.log(rCity + ' removed, dist was ' + rowDist + ', max is ' + myMax);
-						deleteRow(table.rows[i]);
-						i--; 
-						// oddRow ^= true; //since row deleted, no change necessary, will flip on next iteration
-					} else {
-						//skip row, fix styling
-						if(oddRow)
-							table.rows[i].className = "oddRow";
-						else
-							table.rows[i].className = "";
-						oddRow ^= true;
-					}
+					//skip row, fix styling
+					if(oddRow)
+						table.rows[i].className = "oddRow";
+					else
+						table.rows[i].className = "";
+					oddRow ^= true;
 				}
 			}
-			//***************************************
-			//TIMING FUNCTION - REMOVE WHEN NOT IN USE
-			myT = myTime(myT);
-		});
+		}
+		//***************************************
+		//TIMING FUNCTION - REMOVE WHEN NOT IN USE
+		// myT = myTime(myT);
 	});
 }
 // function handleRow() {
@@ -124,6 +130,20 @@ function FilterLocations() {
 function deleteRow(btn) {
   var row = btn;
   row.parentNode.removeChild(row);
+}
+
+//shortened script for printing to console log
+function lOut(str) {
+	window.console.log(str);
+}
+
+//functions for testing time to execute scripts
+function myTime(a) {
+	i = performance.now();
+	lOut(a[0] + ". " + (i-a[1]));
+	a[0]++;
+	a[1] = i;
+	return a;
 }
 
 window.addEventListener('load',FilterLocations);
