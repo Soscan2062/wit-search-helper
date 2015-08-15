@@ -10,10 +10,14 @@
   },
   
   "browser_action": {
-   "default_icon": "icon.png",
    "default_popup": "popup.html"
   },
   
+  "icons": { "16": "icon16-2.png",
+			"32": "icon32-2.png",
+			"48": "icon48-2.png",
+			"128": "icon128-2.png" },
+
   "options_page": "options.html",
   
   "permissions": [
@@ -25,7 +29,8 @@
    
    "content_scripts": [
 	{
-		"matches": ["https://wit.twc.state.tx.us/*pageid=BROWSE_POST_BY_TEXT*"],
+		"matches": ["https://wit.twc.state.tx.us/*pageid=BROWSE_POST_BY_TEXT*",
+					"https://wit.twc.state.tx.us/*pageid=JS_POSTING_BROWSE_SEARCH*"],
 		"js": ["WITEditor.js"]
 	}
    ]

@@ -14,22 +14,48 @@ This file is part of Work in Texas (WIT) Search Helper.
     You should have received a copy of the GNU General Public License
     along with WIT Search Helper.  If not, see <http://www.gnu.org/licenses/>.
 */
+//NON WORKING FUNCTION, COMMENTED OUT
+//FOR POSSIBLE FUTURE USES
+// function AddDistance() {
+	// var plus = document.getElementById('zip_plus');
+	// if(plus == 'undefined' || plus == null) {
+		// lOut('No Dist Plus element found');
+		// return;
+	// }
+	// element found, add distances
+	// strAdd = "<option value='15'>15 miles</option><option value='50'>50 miles</option></select>"
+	// plus.innerHTML = plus.innerHTML + strAdd;
+	// lOut('success');
+// }
+// window.addEventListener('load',AddDistance);
 
 function FilterLocations() {
 	//test variable for time
-	// myT = [1,Date()]; //first is event number for tracking, second is last call of Date()
+	myT = [1,performance.now()]; //first is event number for tracking, second is last call of Date()
 	
 	var table = document.getElementById('id_search_results');
 	if(table == 'undefined' || table == null) {
-		window.console.log('No table found');
+		// lOut('No table found');
 		return;
 	}
+	//***************************************
+	//TIMING FUNCTION - REMOVE WHEN NOT IN USE
+	myT = myTime(myT);
+	
+	//for fixing styling
+	oddRow = true; 
 	chrome.runtime.sendMessage({method: "getLocalStorage", key: "myDistances"}, function(response) {
 		//window.console.log(response.data);
 		var myDist = JSON.parse(response.data);
+		//***************************************
+		//TIMING FUNCTION - REMOVE WHEN NOT IN USE
+		myT = myTime(myT);
 		//window.console.log('Distances retrieved, total: ' + myDist.length);
 		chrome.runtime.sendMessage({method: "getLocalStorage", key: "maxDist"}, function(response) {
 			var myMax = response.data;
+			//***************************************
+			//TIMING FUNCTION - REMOVE WHEN NOT IN USE
+			myT = myTime(myT);
 			
 			//find column of Location
 			//Column count differs between logged in and out
@@ -40,13 +66,11 @@ function FilterLocations() {
 				}
 			}
 
+			//***************************************
+			//TIMING FUNCTION - REMOVE WHEN NOT IN USE
+			myT = myTime(myT);
 			//var table = document.getElementById('id_search_results');
 			for (var i = 1, row; row = table.rows[i]; i++) {
-				//THIS SHOULD BE UNNECESSARY
-				//break if outside of table length
-				// if(i > table.rows.length)
-					// break;
-				
 				//iterate through rows and verify their distance is below Max
 				var rCity = row.cells[cLoc].innerText;
 				//find citys precalculated distance
@@ -66,21 +90,37 @@ function FilterLocations() {
 				}
 				if(rowDist == "NF") {
 					//city not found
-					window.console.log(rCity + ' was not found.');
-					row.cells[cLoc].innerHTML = row.cells[cLoc].innerHTML + '<br/>CITY NOT FOUND';
+					//COMMENTED OUT FOR SCRIPT RUNTIME IMPROVEMENT
+					// window.console.log(rCity + ' was not found.');
+					// row.cells[cLoc].innerHTML = row.cells[cLoc].innerHTML + '<br/>CITY NOT FOUND';
 				} else {
 					//city found, compare and handle appropriately
 					if(rowDist > myMax){ ////////////////////ADD DIFFERENT SETTING FROM OPTIONS
 						//distance to city exceeds my Max, remove row
 						//window.console.log(rCity + ' removed, dist was ' + rowDist + ', max is ' + myMax);
 						deleteRow(table.rows[i]);
-						i--;
+						i--; 
+						// oddRow ^= true; //since row deleted, no change necessary, will flip on next iteration
+					} else {
+						//skip row, fix styling
+						if(oddRow)
+							table.rows[i].className = "oddRow";
+						else
+							table.rows[i].className = "";
+						oddRow ^= true;
 					}
 				}
 			}
+			//***************************************
+			//TIMING FUNCTION - REMOVE WHEN NOT IN USE
+			myT = myTime(myT);
 		});
 	});
 }
+// function handleRow() {
+	
+// }
+
 function deleteRow(btn) {
   var row = btn;
   row.parentNode.removeChild(row);
@@ -91,10 +131,13 @@ function lOut(str) {
 	window.console.log(str);
 }
 function myTime(a) {
-	lOut(a[0] + ". " + Date()-a[1]);
+	i = performance.now();
+	lOut(a[0] + ". " + (i-a[1]));
 	a[0]++;
-	a[1] = Date();
+	a[1] = i;
+	return a;
 }
 //END - for testing purposes
 
 window.addEventListener('load',FilterLocations);
+
