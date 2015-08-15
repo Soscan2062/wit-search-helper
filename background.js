@@ -15,11 +15,13 @@ This file is part of Work in Texas (WIT) Search Helper.
     along with WIT Search Helper.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//REQUIRED for passing localstorage variables from extension to webpages for use
+//REQUIRED for passing localstorage variables from extension to content scripts (webpages) for use
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.method == "getLocalStorage")
+    if (request.method == 'getLocalStorage')
       sendResponse({data: localStorage[request.key]});
-    else
+    else 
       sendResponse({}); // snub them.
 });
+
+
 

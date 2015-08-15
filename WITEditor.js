@@ -19,13 +19,13 @@ This file is part of Work in Texas (WIT) Search Helper.
 // function AddDistance() {
 	// var plus = document.getElementById('zip_plus');
 	// if(plus == 'undefined' || plus == null) {
-		// lOut('No Dist Plus element found');
+		// window.console.log('No Dist Plus element found');
 		// return;
 	// }
 	// element found, add distances
 	// strAdd = "<option value='15'>15 miles</option><option value='50'>50 miles</option></select>"
 	// plus.innerHTML = plus.innerHTML + strAdd;
-	// lOut('success');
+	// window.console.log('success');
 // }
 // window.addEventListener('load',AddDistance);
 
@@ -35,7 +35,7 @@ function FilterLocations() {
 	
 	var table = document.getElementById('id_search_results');
 	if(table == 'undefined' || table == null) {
-		// lOut('No table found');
+		// window.console.log('No table found');
 		return;
 	}
 	//***************************************
@@ -125,19 +125,6 @@ function deleteRow(btn) {
   var row = btn;
   row.parentNode.removeChild(row);
 }
-
-//START - for testing purposes
-function lOut(str) {
-	window.console.log(str);
-}
-function myTime(a) {
-	i = performance.now();
-	lOut(a[0] + ". " + (i-a[1]));
-	a[0]++;
-	a[1] = i;
-	return a;
-}
-//END - for testing purposes
 
 window.addEventListener('load',FilterLocations);
 

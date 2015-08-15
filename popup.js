@@ -15,39 +15,24 @@ This file is part of Work in Texas (WIT) Search Helper.
     along with WIT Search Helper.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-chrome.extension.onMessage.addListener(function(request, sender) {
-  if (request.action == "getSource") {
-    message.innerText = request.source;
-  }
-});
-
-// function testCode() {	
-
-// }
-
 function onWindowLoad() {
-	// document.getElementById('testButton').addEventListener('click', testCode);
-
-	var message = document.querySelector('#message');
+	//****************************
+	//remove once new storage value is set
+	// chrome.storage.local.clear();
 	
-	//load previous maxDistance if available
-	var myMax = localStorage['maxDist'];
-	if($.isNumeric(myMax))
-		document.getElementById('maxDist').value = localStorage['maxDist'];
-	else {
-		document.getElementById('maxDist').value = 20;
-		localStorage['maxDist'] = 20;
-	}
-		
+	//load needed variables, just maxDistance, default is handled in array
+	var myMax = getLocalStorage('maxDist'); 
+	document.getElementById('maxDist').value = myMax;
 	
 	//add listener to save value when changed
 	//and keep non numeric values out
 	document.getElementById('maxDist').addEventListener('input',function(){
 		var myMax = document.getElementById('maxDist').value;
 		if($.isNumeric(myMax))
-			localStorage['maxDist'] = myMax;
+			setLocalStorage([[myMax,'maxDist']]);
+			// localStorage['maxDist'] = myMax;
 		else if(document.getElementById('maxDist').value != "")
-			document.getElementById('maxDist').value = localStorage['maxDist'];
+			document.getElementById('maxDist').value = getLocalStorage['maxDist'];
 	});
 }
 
