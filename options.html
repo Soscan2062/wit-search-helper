@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head><title>Work in Texas Search Helper</title>
-<link rel="stylesheet" type="text/css" href="main.css" />
+<link rel="stylesheet" type="text/css" href="options.css" />
 <script type="text/javascript" charset="utf-8" src="jquery-2.1.4.js"></script>
 <script src="utils.js"></script>
 <script type="text/javascript" src="TexasCitiesJSON.js"></script>
@@ -10,24 +10,31 @@
 </head>
 
 <body>
-<div id="content">
-	<span id="witSettings">
-		<h1>Work in Texas Search Helper</h1><br/>
-		<p id="witHeader">Input your zip code</p><br/>
-		<div class="zipInput"><input type="text" value="76010" id="thiszip"/></div><br/>
-		<span><button id="calcDist">Preview Distances</button>
-		<span id="statusMessCacl"> </span></span>
-		<br/><br/>
-		<p id="witInputHeader">How should the results be handled?</p>
-		<div id="inputRadio"><input type="radio" name="resultHandling" value="remove">Remove the bad ones<br/>
-		<input type="radio" name="resultHandling" value="strike">Strike through the bad ones<br/>
-		<input type="radio" name="resultHandling" value="highlight">Highlight the good ones<br/></div>
-		<br/>
-		<span><button id="saveOptions">Save Changes</button><span id="statusMess"> </span></span>
-	</span>
-	<span>
-		<span><div id="distPreviewHeader"><h1>Distance Preview<h1></div><div id="distPrev"></div></span>
-	 </span>
-</div>
+	<div id="background-layer">
+		<div id="header">
+			<h1>Work in Texas Search Helper</h1>
+		</div>
+		<div id="content">
+			<span id="settings">
+				<div id="sectionHeader"><p><h2>Settings</h2></p></div>
+				<h3><u>Input zip code</u></h3>
+				<div class="zipInput"><input type="text" value="76010" id="thiszip"/></div>
+				<button id="calcDist">Preview Distances</button><span id="statusMessCacl"> </span>
+				<br/><br/>
+				<h3><u>How should the results be handled?</u></h3>
+				<div id="inputRadio">
+					<input type="radio" name="resultHandling" value="remove">Remove the bad ones<br/>
+					<input type="radio" name="resultHandling" value="strike">Strike through the bad ones<br/>
+					<input type="radio" name="resultHandling" value="highlight">Highlight the good ones<br/>
+				</div>
+				<br/>
+				<button id="saveOptions">Save Changes</button><span id="statusMess"> </span>
+			</span>
+			<span id="preview">
+				<div id="sectionHeader"><p><h2>Distance Preview</h2></p></div>
+				<div id="distPrev"> </div>
+			</span>
+		</div>
+	</div>
 </body>
 </html>
