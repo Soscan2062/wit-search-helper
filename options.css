@@ -1,0 +1,112 @@
+/*
+options.html
+
+*/
+
+/*spacing was a little too far, reduced*/
+h2, h3 {
+	margin-top:5px;
+	margin-bottom:5px;
+	line-height:15px;
+}
+html {
+	min-height:100%;
+	max-height:100%;
+	position:fixed;
+	top:0px;
+    bottom:0px;
+	left:0px;
+	right:0px;
+	background-color:#d87015;
+}
+body {
+	width:700px;
+	height:100%;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:0px;
+	margin-bottom:0px;
+	padding-top:8px;
+	padding-bottom:8px;
+	color:#004091; /*text color, inherited later*/
+}
+#background-layer {
+	height:100%;
+	width:100%;
+	background-color:#ffd478; 
+}
+#header { 
+	width:inherit;
+	height:10%;
+	text-align:center; 
+	display:inline-block;
+	font:bold 16px arial,sans-serif;
+	color:#004091;	
+}
+/*contains settings and preview columns*/
+#content { 
+	width:inherit;
+	height:90%;
+	margin-left:auto;
+	margin-right:auto;
+	display:inline-flex;
+	justify-content:center;
+	font:14px arial,sans-serif; 
+	color:inherit;
+	padding:10px;
+}
+#settings { 
+	width:50%;
+	height:auto;
+	color:inherit;
+	padding:10px;
+}
+/*preview section*/
+#preview { 
+	width:40%;
+	height:100%;
+	min-height:320px;
+	display:flex;
+	flex-direction:column;
+	color:inherit;
+	padding:10px;
+}
+/*holds preview table*/
+#distPrev { 
+	height:100%;
+	display:flex;
+	flex:1;
+	overflow:auto;
+	overflow-x:hidden;
+}
+/*generic section header format*/
+#sectionHeader { 
+	width:100%;
+	height:auto;
+	display:inline-block;
+	font:bold 16px arial,sans-serif; 
+	text-align:center;
+}
+#thiszip { 
+	width:60px; 
+	margin:1px 5px;
+	padding:3px;
+}
+button, input { 
+	margin:1px 5px;
+	padding:3px;
+}
+/*table formatting*/
+table {
+	
+} 
+td, tr { 
+	font:14px arial,sans-serif; 
+	color:inherit;
+}
+.alnright{ text-align:right; }
+
+/*this includes padding and borders WITHIN the total width and height*/
+* {
+	box-sizing: border-box;
+}
