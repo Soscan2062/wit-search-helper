@@ -97,14 +97,14 @@ function FilterLocations() {
 			}
 			if(rowDist == "NF") {
 				//city not found
+				window.console.log(rCity + ' was not found.');
 				//COMMENTED OUT FOR SCRIPT RUNTIME IMPROVEMENT
-				// window.console.log(rCity + ' was not found.');
-				// row.cells[cLoc].innerHTML = row.cells[cLoc].innerHTML + '<br/>CITY NOT FOUND';
+				row.cells[cLoc].innerHTML = row.cells[cLoc].innerHTML + '<br/>CITY NOT FOUND';
 			} else {
 				//city found, compare and handle appropriately
 				if(rowDist > myMax){ ////////////////////ADD DIFFERENT SETTING FROM OPTIONS
 					//distance to city exceeds my Max, remove row
-					//window.console.log(rCity + ' removed, dist was ' + rowDist + ', max is ' + myMax);
+					// window.console.log(rCity + ' removed, dist was ' + rowDist + ', max is ' + myMax);
 					deleteRow(table.rows[i]);
 					i--; 
 					// oddRow ^= true; //since row deleted, no change necessary, will flip on next iteration
