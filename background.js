@@ -23,5 +23,22 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       sendResponse({}); // snub them.
 });
 
+/*
+For opening options on first install
+using a system for making changes after updates later
+blank/0 - no install, load options to set defaults
+1.3 - current version
+*/
+function install_notice() {
+	var vers = chrome.runtime.getManifest().version;
+    if (localStorage.getItem('changes_check') == vers)
+        return;
 
+	//additional version prompt changes go here
+	
+    //set vers, open options for first install
+    localStorage.setItem('changes_check', vers);
+    chrome.tabs.create({url: "options.html"});
+}
+install_notice();
 

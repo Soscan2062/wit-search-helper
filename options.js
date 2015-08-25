@@ -141,8 +141,7 @@ function restore_options() {
 	//*******************
 	// var x = getLocalStorage('myZip');
 	// lOut('myZip is: ' + x);
-	// return;
-	
+	// return;	
 	
 	//add necessary event listeners
 	document.getElementById('saveOptions').addEventListener('click', save_options);
