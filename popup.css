@@ -1,0 +1,31 @@
+/* popup.js */
+body { font:bold 9px arial,sans-serif; }
+h1 { font:bold 16px arial,sans-serif; }
+h2 { font:bold 16px arial,sans-serif; }
+#witPopup{ width:200px; margin-left:auto; margin-right:auto; clear:both; padding:15px; }
+#popHeader { font: 16px arial, sans-serif; }
+/* #closeButton { font:bold 14px arial,sans-serif; cursor:pointer; text-align:right;} */
+#maxDistInput{ width:10%;}
+#message{border:1px solid black;}
+
+/* options.js */
+#content { width:700px; margin-left:auto; margin-right:auto; clear:both; }
+#witSettings { float:left; }
+input { width:35px; }
+#witHeader { font:bold 16px arial,sans-serif; text-indent:25px; display:inline; }
+#witInputHeader { font:bold 16px arial,sans-serif;display:inline; padding:4px 1px  }
+#distPreviewHeader { font:bold 16px arial,sans-serif; text-indent:25px; display:inline; }
+#statusMess { color:red; }
+#statusMessCacl { color:red; }
+#inputRadio { font:14px arial,sans-serif; }
+table, td, tr { font:14px arial,sans-serif; }
+.alnright{ text-align:right; }
+
+/* Debug */
+#statusMessageHolder { color:red; }
+
+/*
+outer background: d87015
+inner background: ffd478
+text: 004091
+*/

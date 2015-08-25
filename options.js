@@ -1,3 +1,20 @@
+/*
+This file is part of Work in Texas (WIT) Search Helper.
+
+    WIT Search Helper is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    WIT Search Helper is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with WIT Search Helper.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 function displayStatusMesage(curStatusMessage)
 {
 	document.getElementById("statusMess").innerHTML = curStatusMessage;
@@ -24,12 +41,13 @@ function calculateDistance() {
 	var strMyZip = document.getElementById('thiszip').value;
 	var txCities = getCities();
 	var storeDistances = "";
-	localStorage['myZip'] = strMyZip;
+	// localStorage['myZip'] = strMyZip;
+	// setLocalStorage([[strMyZip,'myZip']]); //STORAGE SET ON SAVE OPTIONS
 	displayCalcStatus(curStatusMessage);
 	
 	//search for zip codes gps coordinates
 	//verify zip code is valid
-	if(!$.isNumeric(strMyZip) || strMyZip.length>5)
+	if(strMyZip.length != 5) //is numeric is handled on input edit
 	{
 		curStatusMessage = "There was an error with the zip code.";
 		displayCalcStatus(curStatusMessage);
@@ -37,6 +55,11 @@ function calculateDistance() {
 	}
 	//find my lat and lng
 	var i = txCities.map(function(e) { return e.zip; }).indexOf(strMyZip);
+	if(!i) {
+		curStatusMessage = "The zip code " + strMyZip + " was not found.";
+		displayCalcStatus(curStatusMessage);
+		return;
+	}
 	myLat = txCities[i].lat;
 	myLng = txCities[i].lng;
 	
@@ -67,13 +90,19 @@ function calculateDistance() {
 	document.getElementById('distPrev').innerHTML = output;
 	
 	//store object
-	localStorage['myDistances'] = JSON.stringify(storeDistances);
-	//var x = JSON.parse(localStorage['myDistances']);
+	// localStorage['myDistances'] = JSON.stringify(storeDistances);
+	setLocalStorage([[storeDistances,'myDistances']])
 }
 
+/*
+NOTE - all saves were done seperately, the combining of saves
+is to reduce calls to local storage in the utils scripts
+*/
 function save_options() {
 	var curStatusMessage = "";
+	//resHanSel: short for result Handling Selector
 	var resHanSel = document.getElementsByName("resultHandling");
+	//selResHan: short for selected Result Handling
 	var selResHan = 0;
 	if(resHanSel)
 	{
@@ -84,48 +113,71 @@ function save_options() {
 		}
 	}
 	
-	if (selResHan != 0)
-	{
-		// Result handling chosen, save value
-		localStorage["result_handling"] = selResHan;
-		curStatusMessage = "Options Saved.";			
-	}
-	else	
+	if (selResHan == 0){ //no Result Handling selected, exit
 		curStatusMessage = "Please select a Result Handling option.";
-
+		displayStatusMesage(curStatusMessage);
+		return;
+	} 
+	
+	strMyZip = document.getElementById('thiszip').value;
+	if(!$.isNumeric(strMyZip) || strMyZip.length>5)
+	{
+		curStatusMessage = "There was an error with the zip code.";
+		displayStatusMesage(curStatusMessage);
+		return;
+	}
+	
 	calculateDistance();
 		
+	//everything is in order, save zip and result handling
+	// localStorage["result_handling"] = selResHan;
+	setLocalStorage([[strMyZip,'myZip'],[selResHan,'resultHandling']])
+	curStatusMessage = "Options Saved.";	
 	displayStatusMesage(curStatusMessage);
 }
 
 // Restores select box state to saved value from localStorage.
-function restore_options() 
-{
+function restore_options() {
+	//*******************
+	// var x = getLocalStorage('myZip');
+	// lOut('myZip is: ' + x);
+	// return;
+	
+	
 	//add necessary event listeners
 	document.getElementById('saveOptions').addEventListener('click', save_options);
 	document.getElementById('calcDist').addEventListener('click', calculateDistance);
+	document.getElementById('thiszip').addEventListener('input',function(){
+		var myZip = document.getElementById('thiszip').value;
+		lOut(myZip);
+		if(!$.isNumeric(myZip)) {
+			if(document.getElementById('thiszip').value != "")
+				document.getElementById('thiszip').value = getLocalStorage('myZip');
+		}
+	});
 	//document.getElementById('distCalcF').addEventListener('submit', calculateDistance);
 	
 	document.getElementById("statusMess").innerHTML = "";	
-		
-	var preferredResHan = localStorage["result_handling"];
-	if (!preferredResHan)
-		return;
-
-	var resHanSel = document.getElementsByName("resultHandling");
-	var curSelVal = 0;
-	if (resHanSel)
-	{
-		for (x=0; x < resHanSel.length; x++) 
-		{
-			curSelVal = resHanSel[x].value
-			if (resHanSel[x].value == preferredResHan) 
-			{
-				resHanSel[x].checked = "true";
-				break;
+	
+	//restore Result Handling
+	// var preferredResHan = localStorage["result_handling"];
+	var preferredResHan = getLocalStorage('resultHandling');
+	if (preferredResHan) {
+		var resHanSel = document.getElementsByName("resultHandling");
+		var curSelVal = 0;
+		if (resHanSel) {
+			for (x=0; x < resHanSel.length; x++) {
+				curSelVal = resHanSel[x].value
+				if (resHanSel[x].value == preferredResHan) {
+					resHanSel[x].checked = "true";
+					break;
+				}
 			}
 		}
 	}
+
+	//restore Zip
+	document.getElementById('thiszip').value = getLocalStorage('myZip');
 	
 	curStatusMessage = "Options restored.";
 	displayStatusMesage(curStatusMessage);
